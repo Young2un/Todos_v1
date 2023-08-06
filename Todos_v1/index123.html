@@ -75,6 +75,11 @@
       render()
     }
 
+    const setCurrentFilter = newCurrentFilter => {
+      currentFilter = newCurrentFilter;
+      render()
+    }
+
     // 데이터 목업
     const fetchTodos = () => {
       setTodos([
@@ -89,46 +94,24 @@
 
     // 할일 추가
     const addTodo = content => {
-
       setTodos([{ id: generateNextid(), content, completed: false }, ...todos])
     }
 
     // 할일 check
 
     const toggleCompletedById = id => {
-      todos = todos.map(todo => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo))
-      render()
-    }
-    // render(todos)
 
-    // const completedTodos = () => {
-    //   const filterTodos = todos.filter(todo => todo.completed)
-    //   render(filterTodos)
-    // }
-    // const activeTodos = () => {
-    //   const filterTodos = todos.filter(todo => !todo.completed)
-    //   render(filterTodos)
-    // }
+      // todos = todos.map(todo => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo))
+      // render()
+
+      setTodos(todos.map(todo => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo)))
+    }
 
 
     // 할일 제거
     const removeTodo = id => {
-      todos = todos.filter(todo => todo.id !== +id);
-      render()
+      setTodos(todos.filter(todo => todo.id !== +id))
     }
-
-
-
-    const setCurrentFilter = newCurrentFilter => {
-      currentFilter = newCurrentFilter;
-      render()
-    }
-
-    // 할일 필터링
-
-    // const filteringTodo = ()=>{
-    //   todos = todos.filter(todo=> todo.completed)
-    // }
 
 
     /* 이벤트 핸들러 */
@@ -149,22 +132,11 @@
       $todoInput.value = '';
     });
 
-
-    // 할일 check
-
-
-    // $todoFilters.addEventListener('change', e => {
-    //   if (e.target.matches('input[type=checkbox]'))
-
-    // })
-
     // 할일 제거
     $todoList.addEventListener('click', e => {
       if (e.target.matches('.todo-remove'))
         removeTodo(e.target.parentNode.id);
     });
-
-
 
     $todoList.addEventListener('click', e => {
       if (e.target.matches('input[type=checkbox]')) {
@@ -182,20 +154,8 @@
       document.querySelector('.active').classList.toggle('active', false);
       e.target.classList.toggle('active', true);
 
-      setCurrentFilter(currentFilter)
-
-
-      // if (e.target.id === 'completed') {
-      //   completedTodos()
-      // }
-      // if (e.target.id === 'active') {
-      //   activeTodos()
-      // }
-      // if (e.target.id === 'all') {
-      //   render()
-      // }
+      setCurrentFilter(e.target.id)
     })
-
 
   </script>
 </body>
