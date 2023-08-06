@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todos v0</title>
+</head>
+
+<body>
+  <form>
+    <input type="text" class="todo-input" placeholder="enter todo!" />
+  </form>
+  <ul class="todo-list"></ul>
+  <script>
+    // state
+    let todos = [];
+
+    const $todoInput = document.querySelector('.todo-input');
+    const $todoList = document.querySelector('.todo-list');
+
+    // functions
+    const render = () => {
+      // prettier-ignore
+      document.querySelector('.todo-list').innerHTML = todos.map(({ id, content, completed }) => `
+          <li id="${id}">
+            <input type="checkbox" ${completed ? 'checked' : ''}>
+            <span>${content}</span>
+            <button class="todo-remove">X</button>
+          </li>`).join('');
+    };
+
+    const generateNextid = () => Math.max(...todos.map(todo => todo.id), 0);
+
+    const fetchTodos = () => {
+      todos = [
+        { id: 3, content: 'Javascript', completed: false },
+        { id: 2, content: 'CSS', completed: true },
+        { id: 1, content: 'HTML', completed: false },
+      ];
+
+      render();
+    };
+
+    const addTodo = newTodo => {
+      todos = [newTodo, ...todos];
+      render();
+    };
+
+    const removeTodo = id => {
+      todos = todos.filter(todo => todo.id !== +id);
+      render();
+    };
+
+    // handlers
+    window.addEventListener('DOMContentLoaded', fetchTodos);
+
+    document.querySelector('form').addEventListener('submit', e => {
+      e.preventDefault();
+
+      const content = $todoInput.value;
+      addTodo({ id: generateNextid(), content, completed: false });
+
+      $todoInput.value = '';
+    });
+
+    $todoList.addEventListener('click', e => {
+      if (e.target.matches('.todo-remove')) removeTodo(e.target.parentNode.id);
+    });
+  </script>
+</body>
+
+</html>
